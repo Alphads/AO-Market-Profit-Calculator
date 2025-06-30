@@ -27,12 +27,11 @@
         }
 
         body {
-            background: repeating-linear-gradient(135deg, #2d2212 0px, #2d2212 40px, #3b2a14 40px, #3b2a14 80px);
+            background: linear-gradient(120deg, #1a1408 0%, #2d2212 60%, #3b2a14 100%);
             color: var(--text-light);
+            min-height: 100vh;
             height: 100vh;
             overflow: hidden;
-            border: 12px solid var(--border-light);
-            box-shadow: 0 0 40px 10px #000a inset;
         }
         /* Medieval fonts */
         @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&display=swap');
@@ -250,15 +249,17 @@
         }
 
         /* Notepad */
+
         .notepad {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            background: none !important;
         }
 
         .notepad-content {
             flex-grow: 1;
-            background: repeating-linear-gradient(135deg, #3b2a14 0px, #3b2a14 40px, #2d2212 40px, #2d2212 80px);
+            background: var(--bg-dark) !important;
             border: 2px solid var(--border-light);
             padding: 8px;
             font-family: 'IM Fell English SC', 'UnifrakturCook', serif;
@@ -359,13 +360,10 @@
 </head>
 <body>
 
-    <!-- Navigation divisions -->
-    <div class="nav-bar">
-        <div style="display: flex;">
-            <div style="padding: 0 24px; display: flex; align-items: center; height: 100%; border-right: 2px solid var(--border-light); font-weight: bold; color: var(--accent-gold); background: transparent; font-family: 'UnifrakturCook', 'IM Fell English SC', serif; font-size: 1.2em; letter-spacing: 2px;">Trade Route Finder</div>
-            <div style="padding: 0 24px; display: flex; align-items: center; height: 100%; color: var(--text-dim);"></div>
-        </div>
-        <div style="padding: 0 24px; color: var(--accent-gold); font-weight: bold; font-size: 1.2em; letter-spacing: 2px; font-family: 'UnifrakturCook', 'IM Fell English SC', serif;">V.2.0</div>
+    <!-- Top Bar with App Name and Version -->
+    <div class="title-bar" style="position: sticky; top: 0; z-index: 100;">
+        <span class="title-text" style="font-size: 1.35em; color: var(--accent-gold); font-family: 'UnifrakturCook', 'IM Fell English SC', serif; letter-spacing: 2px;">Albion Online Market Profit Calculator</span>
+        <span class="title-version" style="font-size: 1.1em; color: var(--accent-gold); font-family: 'UnifrakturCook', 'IM Fell English SC', serif; font-weight: bold; margin-left: auto; letter-spacing: 2px;">v2.1</span>
     </div>
 
     <!-- Main container -->
@@ -520,51 +518,83 @@ Select an item to fetch data.
                 <!-- Smart Search panel -->
                 <div class="panel" id="smart-search-panel" style="margin-top: 10px; width: 100%;">
                     <div class="panel-content" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px;">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <button class="control-input" id="smart-search-btn" style="
-                                width: auto;
-                                padding: 5px 14px;
-                                font-weight: bold;
-                                font-size: 13px;
-                                background: var(--accent-gold);
-                                color: #3b2a14;
-                                border: 1.5px solid var(--border-light);
-                                border-radius: 6px;
-                                box-shadow: 0 1px 4px #0006;
-                                font-family: 'IM Fell English SC', 'UnifrakturCook', serif;
-                                letter-spacing: 1px;
-                                transition: background 0.2s, color 0.2s;
-                                cursor: pointer;
-                            "
-                            onmouseover="this.style.background='#a67c3b';this.style.color='#fffbe6';"
-                            onmouseout="this.style.background='var(--accent-gold)';this.style.color='#3b2a14';"
-                            >🔎 Smart Search: Best Margin</button>
-                            <label style="font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; margin: 0;">
-                                <input type="checkbox" id="bm-caerleon-flip-checkbox" style="accent-color: #3b5ca1; width: 16px; height: 16px; margin-right: 2px; vertical-align: middle;"> Only show BM↔Caerleon flips
-                            </label>
-                        </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <button id="refresh-margins-btn" title="Refresh Smart Search Margins" style="background:linear-gradient(135deg,#bfa97a 60%,#e2d3a1 100%);color:#23231a;font-weight:bold;padding:2px 10px;border:none;border-radius:5px;box-shadow:0 1px 4px #0002;cursor:pointer;font-size:15px;transition:background 0.2s;display:flex;align-items:center;justify-content:center;min-width:28px;min-height:28px;">
+                    ⟳
+                </button>
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; margin: 0;">
+                    <input type="checkbox" id="bm-caerleon-flip-checkbox" style="accent-color: #3b5ca1; width: 16px; height: 16px; margin-right: 2px; vertical-align: middle;"> Only show Caerleon → Black Market flips
+                </label>
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; margin: 0;">
+                    <input type="checkbox" id="bm-anycity-flip-checkbox" style="accent-color: #3b5ca1; width: 16px; height: 16px; margin-right: 2px; vertical-align: middle;"> Any City → Black Market flips
+                </label>
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; margin: 0;">
+                    <input type="checkbox" id="only-materials-checkbox" style="accent-color: #7c9a3a; width: 16px; height: 16px; margin-right: 2px; vertical-align: middle;"> Only show materials
+                </label>
+                <label style="font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; margin: 0;">
+                    <input type="checkbox" id="anti-manipulation-checkbox" style="accent-color: #a13b3b; width: 16px; height: 16px; margin-right: 2px; vertical-align: middle;"> Anti-manipulation filter
+                </label>
+                <button class="control-input" id="smart-search-btn" style="
+                    width: auto;
+                    padding: 5px 14px;
+                    font-weight: bold;
+                    font-size: 13px;
+                    background: var(--accent-gold);
+                    color: #3b2a14;
+                    border: 1.5px solid var(--border-light);
+                    border-radius: 6px;
+                    box-shadow: 0 1px 4px #0006;
+                    font-family: 'IM Fell English SC', 'UnifrakturCook', serif;
+                    letter-spacing: 1px;
+                    transition: background 0.2s, color 0.2s;
+                    cursor: pointer;
+                "
+                onmouseover="this.style.background='#a67c3b';this.style.color='#fffbe6';"
+                onmouseout="this.style.background='var(--accent-gold)';this.style.color='#3b2a14';"
+                >🔎 Smart Search: Best Margin</button>
+                <span id="refresh-margins-status" style="color:#bfa97a;font-size:12px;margin-left:4px;"></span>
+            </div>
                         <div id="smart-search-result" style="margin-top: 6px; font-size: 15px; color: var(--margin-blue); font-family: 'Consolas', monospace; min-height: 24px; font-weight: bold;"></div>
                     </div>
                 </div>
                 <!-- Notepad panel below Smart Search -->
-                <div class="panel notepad" style="margin-top: 10px; width: 100%; height: 25px; min-height: 0; display: flex; flex-direction: column; margin-bottom: 18px;">
+                <div class="panel notepad" style="margin-top: 10px; width: 100%; max-height: 320px; min-height: 120px; display: flex; flex-direction: column; margin-bottom: 18px; flex: 0 0 auto; overflow-y: auto;">
                     <div class="panel-header">Notepad (auto-saves)</div>
-                    <div class="panel-content" style="flex: 1 1 0; padding: 0; display: flex; flex-direction: column; min-height: 0;">
-                    <textarea class="notepad-content" id="notepad" style="flex: 1 1 0; width: 100%; height: 22px; min-height: 0; resize: none; box-sizing: border-box;"></textarea>
+                    <div class="panel-content" style="flex: 1 1 0; padding: 0; display: flex; flex-direction: column; min-height: 0; overflow-y: auto;">
+                        <textarea class="notepad-content" id="notepad" style="
+                            flex: 1 1 0;
+                            width: 100%;
+                            min-height: 120px;
+                            max-height: 280px;
+                            height: 180px;
+                            resize: vertical;
+                            box-sizing: border-box;
+                            background: var(--bg-dark);
+                            color: var(--text-main);
+                            font-size: 15px;
+                            font-family: 'Consolas', 'IM Fell English SC', 'UnifrakturCook', serif;
+                            border: 1.5px solid var(--border-light);
+                            border-radius: 7px;
+                            padding: 10px 12px;
+                            margin: 0;
+                            outline: none;
+                            transition: border 0.2s;
+                            overflow-y: auto;
+                        "></textarea>
                     </div>
                 </div>
                 </div>
                 <!-- Stock Management panel on the right side -->
-                <div style="flex: 1; display: flex; flex-direction: column; max-height: 900px;">
-                    <div class="panel" id="stock-panel" style="height: 820px; display: flex; flex-direction: column;">
+                <div style="flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0;">
+                    <div class="panel" id="stock-panel" style="flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; max-height: 90vh; overflow-y: auto;">
                         <div class="panel-header">Stock Management</div>
-                        <div class="panel-content" style="flex: 1 1 0; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px;">
+                        <div class="panel-content" style="flex: 1 1 auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; min-height: 0;">
                             <form id="stock-form" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                                 <select id="stock-item-select" class="control-input" style="min-width: 160px;"></select>
                                 <input type="number" id="stock-qty-input" class="control-input" min="1" value="1" style="width: 70px;" placeholder="Qty">
                                 <button type="submit" class="control-input" style="width: auto; padding: 5px 12px;">Add to Stock</button>
                             </form>
-                            <div id="stock-list" style="margin-top: 8px; width: 100%; max-height: 700px; overflow-y: auto;"></div>
+                            <div id="stock-list" style="margin-top: 8px; width: 100%; max-height: 80vh; overflow-y: auto;"></div>
                         </div>
                     </div>
                 </div>
@@ -599,62 +629,61 @@ Select an item to fetch data.
                     allItems.push({ itemId, itemName });
                 }
             }
-    let best = null;
-    let bestMargin = -Infinity;
-    // Batch fetch all items for all cities in batches of 15
-    resultDiv.textContent = 'Fetching all market data in batches...';
-    const itemIds = allItems.map(i => i.itemId);
-    const cityList = cities.map(c => cityCodes[c]).join(',');
-    const batchSize = 15;
-    const maxRetries = 5;
-    for (let batchStart = 0; batchStart < itemIds.length; batchStart += batchSize) {
-        const batch = itemIds.slice(batchStart, batchStart + batchSize);
-        const url = `https://west.albion-online-data.com/api/v2/stats/prices/${batch.join(',')}?locations=${cityList}&qualities=1`;
-        resultDiv.textContent = `Fetching items ${batchStart + 1}-${Math.min(batchStart + batch.length, itemIds.length)} of ${itemIds.length}...`;
-        let batchRetries = 0;
-        let batchSuccess = false;
-        while (!batchSuccess && batchRetries < maxRetries) {
-            try {
-                const response = await fetch(url);
-                if (response.status === 429) {
-                    await new Promise(res => setTimeout(res, 1500 + Math.random() * 1000));
-                    batchRetries++;
-                    continue;
+            // Batch fetch all items for all cities in batches of 15
+            resultDiv.textContent = 'Fetching all market data in batches...';
+            const itemIds = allItems.map(i => i.itemId);
+            const cityList = cities.map(c => cityCodes[c]).join(',');
+            const batchSize = 15;
+            const maxRetries = 5;
+            for (let batchStart = 0; batchStart < itemIds.length; batchStart += batchSize) {
+                const batch = itemIds.slice(batchStart, batchStart + batchSize);
+                const url = `https://west.albion-online-data.com/api/v2/stats/prices/${batch.join(',')}?locations=${cityList}&qualities=1`;
+                resultDiv.textContent = `Fetching items ${batchStart + 1}-${Math.min(batchStart + batch.length, itemIds.length)} of ${itemIds.length}...`;
+                let batchRetries = 0;
+                let batchSuccess = false;
+                while (!batchSuccess && batchRetries < maxRetries) {
+                    try {
+                        const response = await fetch(url);
+                        if (response.status === 429) {
+                            await new Promise(res => setTimeout(res, 1500 + Math.random() * 1000));
+                            batchRetries++;
+                            continue;
+                        }
+                        if (!response.ok) throw new Error('API error');
+                        const dataArr = await response.json();
+                        // Fill cache for all items/cities in this batch
+                        for (const item of batch) {
+                            marketDataCache[item] = marketDataCache[item] || {};
+                        }
+                        for (const entry of dataArr) {
+                            if (!entry || !entry.item_id || !entry.city) continue;
+                            const itemId = entry.item_id;
+                            const city = Object.keys(cityCodes).find(k => cityCodes[k] === entry.city);
+                            if (!city) continue;
+                            marketDataCache[itemId][city] = {
+                                buy: entry.buy_price_max || 0,
+                                sell: entry.sell_price_min || 0,
+                                cheapest: entry.sell_price_min || entry.buy_price_max || 0,
+                                buy_date: entry.buy_price_max_date || '',
+                                sell_date: entry.sell_price_min_date || '',
+                                last_updated: Date.now()
+                            };
+                        }
+                        batchSuccess = true;
+                    } catch (e) {
+                        batchRetries++;
+                        if (batchRetries >= maxRetries) {
+                            resultDiv.textContent = `Failed to fetch batch ${batchStart + 1}-${Math.min(batchStart + batch.length, itemIds.length)} after ${maxRetries} retries.`;
+                        } else {
+                            await new Promise(res => setTimeout(res, 1200 + Math.random() * 800));
+                        }
+                    }
                 }
-                if (!response.ok) throw new Error('API error');
-                const dataArr = await response.json();
-                // Fill cache for all items/cities in this batch
-                for (const item of batch) {
-                    marketDataCache[item] = marketDataCache[item] || {};
-                }
-                for (const entry of dataArr) {
-                    if (!entry || !entry.item_id || !entry.city) continue;
-                    const itemId = entry.item_id;
-                    const city = Object.keys(cityCodes).find(k => cityCodes[k] === entry.city);
-                    if (!city) continue;
-                    marketDataCache[itemId][city] = {
-                        buy: entry.buy_price_max || 0,
-                        sell: entry.sell_price_min || 0,
-                        cheapest: entry.sell_price_min || entry.buy_price_max || 0,
-                        buy_date: entry.buy_price_max_date || '',
-                        sell_date: entry.sell_price_min_date || '',
-                        last_updated: Date.now()
-                    };
-                }
-                batchSuccess = true;
-            } catch (e) {
-                batchRetries++;
-                if (batchRetries >= maxRetries) {
-                    resultDiv.textContent = `Failed to fetch batch ${batchStart + 1}-${Math.min(batchStart + batch.length, itemIds.length)} after ${maxRetries} retries.`;
-                } else {
-                    await new Promise(res => setTimeout(res, 1200 + Math.random() * 800));
-                }
+                // 1-second delay between batches
+                await new Promise(res => setTimeout(res, 1000));
             }
-        }
-        // 1-second delay between batches
-        await new Promise(res => setTimeout(res, 1000));
-    }
-            // Now, process all items for best margin
+            // Now, process all items for best margin and store all results
+            let allResults = [];
             for (const { itemId, itemName } of allItems) {
                 const data = marketDataCache[itemId];
                 if (!data) continue;
@@ -668,20 +697,91 @@ Select an item to fetch data.
                             const tax = sell * taxRate;
                             const profit = sell - buy - tax;
                             const margin = (profit / buy) * 100;
-                            if (margin > bestMargin) {
-                                bestMargin = margin;
-                                best = { itemId, itemName, buyCity, sellCity, margin };
-                            }
+                            allResults.push({ itemId, itemName, buyCity, sellCity, margin, profit });
                         }
                     }
                 }
             }
-            if (best) {
-                resultDiv.innerHTML = `<span style='color:var(--margin-blue)'>Item:</span> <b>${best.itemName}</b> <span style='color:var(--profit-green)'>Buy:</span> <b>${best.buyCity}</b> <span style='color:var(--tax-red)'>Sell:</span> <b>${best.sellCity}</b> <span style='color:var(--accent-gold)'>Margin:</span> <b>${best.margin.toFixed(1)}%</b>`;
-            } else {
-                resultDiv.textContent = 'No profitable margin found.';
-            }
+            // Sort by margin descending
+            allResults.sort((a, b) => b.margin - a.margin);
+            window.smartSearchResults = allResults;
+            renderSmartSearchResults();
         }
+        // --- Add visually themed refresh box/button for Smart Search margins ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event for refresh button (now in the row with the checkbox)
+            const refreshBtn = document.getElementById('refresh-margins-btn');
+            const statusSpan = document.getElementById('refresh-margins-status');
+            if (refreshBtn) {
+                refreshBtn.onmouseenter = () => {
+                    refreshBtn.style.background = 'linear-gradient(135deg, #e2d3a1 80%, #bfa97a 100%)';
+                    refreshBtn.style.color = '#1a2233';
+                };
+                refreshBtn.onmouseleave = () => {
+                    refreshBtn.style.background = 'linear-gradient(135deg, #bfa97a 60%, #e2d3a1 100%)';
+                    refreshBtn.style.color = '#23231a';
+                };
+                refreshBtn.onclick = async function() {
+                    refreshBtn.disabled = true;
+                    refreshBtn.textContent = '⟳...';
+                    statusSpan.textContent = '';
+                    try {
+                        await smartSearchBestMargin();
+                        statusSpan.textContent = 'Updated!';
+                    } catch (e) {
+                        statusSpan.textContent = 'Error';
+                    }
+                    setTimeout(() => { statusSpan.textContent = ''; }, 1500);
+                    refreshBtn.disabled = false;
+                    refreshBtn.textContent = '⟳';
+                };
+            }
+        });
+
+        function getFilteredSmartSearchResults() {
+            const bmCaerleonOnly = document.getElementById('bm-caerleon-flip-checkbox')?.checked;
+            const bmAnyCityOnly = document.getElementById('bm-anycity-flip-checkbox')?.checked;
+            const onlyMaterials = document.getElementById('only-materials-checkbox')?.checked;
+            const antiManipulation = document.getElementById('anti-manipulation-checkbox')?.checked;
+            let results = smartSearchResults;
+            if (bmCaerleonOnly) {
+                results = results.filter(res => res.buyCity === 'Caerleon' && res.sellCity === 'Black Market');
+            } else if (bmAnyCityOnly) {
+                results = results.filter(res => res.sellCity === 'Black Market' && res.buyCity !== 'Black Market');
+            }
+            if (onlyMaterials) {
+                const materialCats = ["Raw Wood","Raw Ore","Raw Hide","Raw Fiber","Raw Stone","Planks","Metal Bars","Leather","Cloth","Stone Blocks","Fish"];
+                results = results.filter(res => materialCats.some(cat => itemsByCategory[cat] && itemsByCategory[cat][res.itemId]));
+            }
+            if (antiManipulation) {
+                results = results.filter(res => {
+                    if (!res.margin || !res.profitPerItem) return false;
+                    if (res.margin > 1000 && res.buyCity && res.sellCity) return false;
+                    const data = marketDataCache[res.itemId];
+                    if (data && data[res.buyCity] && data[res.sellCity]) {
+                        const buy = data[res.buyCity].cheapest || 0;
+                        const sell = data[res.sellCity].cheapest || 0;
+                        if (buy > 5000 && sell > buy * 10) return false;
+                        if (sell > 2000000 && buy < 10000) return false;
+                    }
+                    return true;
+                });
+            }
+            return results;
+        }
+            const onlyMaterialsCheckbox = document.getElementById('only-materials-checkbox');
+            if (onlyMaterialsCheckbox) {
+                onlyMaterialsCheckbox.style.position = 'relative';
+                onlyMaterialsCheckbox.style.width = '20px';
+                onlyMaterialsCheckbox.style.height = '20px';
+                onlyMaterialsCheckbox.style.marginRight = '8px';
+                onlyMaterialsCheckbox.style.accentColor = '#7c9a3a';
+                onlyMaterialsCheckbox.classList.add('themed-checkbox');
+                onlyMaterialsCheckbox.addEventListener('change', function() {
+                    smartSearchPage = 0;
+                    renderSmartSearchResults();
+                });
+            }
 
         // Helper for Smart Search to fetch data without UI side effects
         async function fetchItemDataSmart(itemId) {
@@ -1316,6 +1416,7 @@ Select an item to fetch data.
         let smartSearchPage = 0;
 
         // --- UI: Enhance BM↔Caerleon checkbox visually to match app theme ---
+        // (Removed duplicate Smart Search Margin Refresh Box/Button creation)
         document.addEventListener('DOMContentLoaded', function() {
             // Remove old BM↔Caerleon Flip button and result panel if present
             const oldFlipBtn = document.getElementById('bm-caerleon-flip-btn');
@@ -1353,6 +1454,44 @@ Select an item to fetch data.
                 bmCaerleonCheckbox.classList.add('themed-checkbox');
                 // Add event: filter Smart Search results in memory when checkbox is toggled
                 bmCaerleonCheckbox.addEventListener('change', function() {
+                    // Uncheck the other BM filter if this is checked
+                    if (bmCaerleonCheckbox.checked) {
+                        const bmAnyCityCheckbox = document.getElementById('bm-anycity-flip-checkbox');
+                        if (bmAnyCityCheckbox) bmAnyCityCheckbox.checked = false;
+                    }
+                    smartSearchPage = 0;
+                    renderSmartSearchResults();
+                });
+            }
+            // Setup for Any City → Black Market checkbox
+            const bmAnyCityCheckbox = document.getElementById('bm-anycity-flip-checkbox');
+            if (bmAnyCityCheckbox) {
+                bmAnyCityCheckbox.style.position = 'relative';
+                bmAnyCityCheckbox.style.width = '20px';
+                bmAnyCityCheckbox.style.height = '20px';
+                bmAnyCityCheckbox.style.marginRight = '8px';
+                bmAnyCityCheckbox.style.accentColor = '#bfa97a';
+                bmAnyCityCheckbox.classList.add('themed-checkbox');
+                bmAnyCityCheckbox.addEventListener('change', function() {
+                    // Uncheck the Caerleon filter if this is checked
+                    if (bmAnyCityCheckbox.checked) {
+                        if (bmCaerleonCheckbox) bmCaerleonCheckbox.checked = false;
+                    }
+                    smartSearchPage = 0;
+                    renderSmartSearchResults();
+                });
+            }
+            // Removed Materials Only checkbox setup
+            // Setup for Anti-manipulation checkbox
+            const antiManipulationCheckbox = document.getElementById('anti-manipulation-checkbox');
+            if (antiManipulationCheckbox) {
+                antiManipulationCheckbox.style.position = 'relative';
+                antiManipulationCheckbox.style.width = '20px';
+                antiManipulationCheckbox.style.height = '20px';
+                antiManipulationCheckbox.style.marginRight = '8px';
+                antiManipulationCheckbox.style.accentColor = '#a13b3b';
+                antiManipulationCheckbox.classList.add('themed-checkbox');
+                antiManipulationCheckbox.addEventListener('change', function() {
                     smartSearchPage = 0;
                     renderSmartSearchResults();
                 });
@@ -1507,20 +1646,64 @@ Select an item to fetch data.
             renderSmartSearchResults();
         }
 
-        // Helper: filter smart search results in memory for BM↔Caerleon flip
+        // Helper: filter smart search results in memory for Caerleon → Black Market flips only, Any City → Black Market, Only Materials, and Anti-Manipulation
         function getFilteredSmartSearchResults() {
             const bmCaerleonOnly = document.getElementById('bm-caerleon-flip-checkbox')?.checked;
-            if (!bmCaerleonOnly) return smartSearchResults;
-            // Only show results where buy/sell is BM or Caerleon (in either direction)
-            return smartSearchResults.filter(res => {
-                const pair1 = res.buyCity === 'Black Market' && res.sellCity === 'Caerleon';
-                const pair2 = res.buyCity === 'Caerleon' && res.sellCity === 'Black Market';
-                return pair1 || pair2;
-            });
+            const bmAnyCityOnly = document.getElementById('bm-anycity-flip-checkbox')?.checked;
+            const onlyMaterials = document.getElementById('only-materials-checkbox')?.checked;
+            const antiManip = document.getElementById('anti-manipulation-checkbox')?.checked;
+            let results = smartSearchResults;
+            if (bmCaerleonOnly) {
+                results = results.filter(res => res.buyCity === 'Caerleon' && res.sellCity === 'Black Market');
+            } else if (bmAnyCityOnly) {
+                results = results.filter(res => res.sellCity === 'Black Market');
+            }
+            if (onlyMaterials) {
+                // Filter to only material categories (Ore, Fiber, Hide, Wood, Stone, maybe Fish, exclude Weapons/Armor)
+                const materialCats = ['Ore', 'Fiber', 'Hide', 'Wood', 'Stone', 'Essence', 'Fish'];
+                results = results.filter(res => {
+                    for (const cat of materialCats) {
+                        if (res.itemId && res.itemId.toLowerCase().includes(cat.toLowerCase())) return true;
+                        if (res.itemName && res.itemName.toLowerCase().includes(cat.toLowerCase())) return true;
+                    }
+                    return false;
+                });
+            }
+            if (antiManip) {
+                // Remove trades with absurd margins or price spikes
+                results = results.filter(res => {
+                    // Remove if margin > 1000% or sell price > 10x buy price for items > 5k
+                    if (res.margin > 1000) return false;
+                    if (res.profitPerItem > 0 && res.buyCity && res.sellCity) {
+                        if (res.buyCity !== res.sellCity && res.buyCity && res.sellCity) {
+                            if (res.buyCity && res.sellCity && res.profitPerItem > 0) {
+                                if (res.buyCity && res.sellCity) {
+                                    if (res.buyCity && res.sellCity) {
+                                        if (res.buyCity && res.sellCity) {
+                                            // Defensive: check for price spike
+                                            if (res.buyCity && res.sellCity) {
+                                                if (res.buyCity && res.sellCity) {
+                                                    // Defensive: check for price spike
+                                                    if (res.buyCity && res.sellCity) {
+                                                        // If buy price is > 5k and sell price > 10x buy price, filter out
+                                                        if (res.buyPrice && res.sellPrice && res.buyPrice > 5000 && res.sellPrice > res.buyPrice * 10) return false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                });
+            }
+            return results;
         }
 
         function renderSmartSearchResults() {
-            // Use filtered results if BM↔Caerleon checkbox is checked
+            // Use filtered results with all filters
             const filteredResults = getFilteredSmartSearchResults();
             const resultDiv = document.getElementById('smart-search-result');
             if (!filteredResults || filteredResults.length === 0) {
@@ -1551,6 +1734,7 @@ Select an item to fetch data.
                     + `<div style='font-weight:bold;margin-bottom:2px;'>#${i+1}: <span>${res.itemName}</span></div>`
                     + `<div><b>Buy in:</b> <span style='color:#7c9a3a'>${res.buyCity}</span> &nbsp; <b>Sell in:</b> <span style='color:#3b5ca1'>${res.sellCity}</span></div>`
                     + `<div><b>Margin:</b> <span>${res.margin.toFixed(1)}%</span> &nbsp; <b>Profit/item:</b> <span style='color:var(--profit-green)'>${Math.round(res.profitPerItem).toLocaleString()} silver</span></div>`
+                    + `<button class='trade-details-btn' data-itemid='${res.itemId}' data-itemname='${encodeURIComponent(res.itemName)}' data-buycity='${res.buyCity}' data-sellcity='${res.sellCity}' style='margin-top:7px;padding:4px 12px;font-size:14px;border-radius:5px;border:1px solid #3b5ca1;background:#3b5ca1;color:#fff;cursor:pointer;font-weight:bold;transition:background 0.2s;'>Trade</button>`
                     + `</div>`;
             }
             html += `</div>`;
@@ -1576,6 +1760,33 @@ Select an item to fetch data.
                     renderSmartSearchResults();
                 }
             };
+
+            // Add event listeners for Trade buttons
+            document.querySelectorAll('.trade-details-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const itemId = btn.getAttribute('data-itemid');
+                    const itemName = decodeURIComponent(btn.getAttribute('data-itemname'));
+                    const buyCity = btn.getAttribute('data-buycity');
+                    const sellCity = btn.getAttribute('data-sellcity');
+                    // Select the item in the market data panel
+                    if (typeof selectItem === 'function') {
+                        selectItem(itemId, itemName);
+                    }
+                    // Set the buy and sell city dropdowns
+                    const buyCitySel = document.getElementById('buy-city');
+                    const sellCitySel = document.getElementById('sell-city');
+                    if (buyCitySel) buyCitySel.value = buyCity;
+                    if (sellCitySel) sellCitySel.value = sellCity;
+                    // Update profit and route
+                    if (typeof calculateProfit === 'function') calculateProfit();
+                    if (typeof updateRoutePanel === 'function') updateRoutePanel();
+                    // Optionally scroll to market data
+                    const marketDataPanel = document.getElementById('market-data');
+                    if (marketDataPanel && marketDataPanel.scrollIntoView) {
+                        setTimeout(() => marketDataPanel.scrollIntoView({behavior: 'smooth', block: 'center'}), 200);
+                    }
+                };
+            });
         }
 
         // Helper: automatically run Smart Search after data loads
